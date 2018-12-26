@@ -1,0 +1,111 @@
+$fontColor: #0091aa;
+$colorHeading: #be4a14;
+#content  // div with id: content
+ {
+  color: $fontColor;
+}
+
+h2 {
+  color: $colorHeading;
+}
+
+h1 {
+  color: green;
+}
+h4 {
+  color: green;
+}
+ul {
+  position: relative;
+  height: 250px;
+  width: 450px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 2px solid #008cba;
+  overflow-y: scroll;
+  border-radius: 5px;
+}
+ul li {
+  display: flex;
+  padding: 10px 20px;
+  color: #fff;
+  margin: 5px 0;
+  transition: 0.5s;
+  border-radius: 5px;
+  align-self: center;
+}
+ul li:nth-child(even) {
+  background-color: lightgreen;
+}
+ul li:nth-child(odd) {
+  background-color: greenyellow;
+}
+body {
+  background-color: lightblue;
+}
+
+.bl {
+  display: grid;
+  grid-template-columns: 1fr, 1fr;
+  grid-template-rows: 1fr, 1fr, 1fr;
+  grid-template-areas:
+    "hoved hoved"
+    "blah bla"
+    "xedni bndex";
+}
+.index {
+  grid-area: bndex;
+}
+.xedni {
+  grid-area: xedni;
+}
+
+.hoved {
+  grid-area: hoved;
+  text-align: center;
+  color: green;
+  background-color: black;
+}
+
+.bla {
+  grid-area: bla;
+}
+.blah {
+  grid-area: blah;
+}
+
+ul li span:nth-child(1) {
+  width: 150px;
+  align-self: auto;
+}
+ul li span:nth-child(2) {
+  width: 150px;
+  align-self: auto;
+}
+ul li span:nth-child(3) {
+  width: 150px;
+  align-self: auto;
+}
+ul li span:nth-child(4) {
+  // width: 30px;
+  text-align: right;
+}
+.btn {
+  margin-top: 10px;
+  border-radius: 5px;
+  font-size: 18px;
+  background: #008cba;
+  color: white;
+  border: none;
+  border-color: 2px solid rgb(253, 253, 253);
+}
+.btn:hover {
+  background-color: white;
+  color: #008cba;
+  border-color: 2px solid #008cba;
+}
+input {
+  border-radius: 5px;
+  margin-top: 4px;
+  font-size: 30px;
+}
