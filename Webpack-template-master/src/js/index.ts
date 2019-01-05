@@ -7,7 +7,7 @@ interface ICustomer {
   id: number;
   firstName: string;
   lastName: string;
-  year: number;
+  year: string;
 }
 
 interface IOrders {
@@ -15,8 +15,8 @@ interface IOrders {
   orderDescription: string;
   KundeId: number;
 }
-
-let uri: string = "http://mscustomer.azurewebsites.net/api/customer";
+let uri: string = "https://localhost:44350/api/customer";
+// let uri: string = "http://mscustomer.azurewebsites.net/api/customer";
 // let uri: string = "http://localhost:63152/api/customer/";
 let uri2: string = "http://mscustomer.azurewebsites.net/api/orders";
 
@@ -76,7 +76,8 @@ UpdateButton.addEventListener("click", UpdateCustomer);
 // InputFirstName.addEventListener("click",getEventTarget)
 
 function GetAllOrders(): void {
-  oList.innerHTML = "waiting for data...";
+  oList.innerText = "";
+  oList.innerHTML = "";
   let addKundeId: number = +InputKundeId.value;
   axios
     .get<IOrders[]>(uri + addKundeId)
@@ -85,6 +86,7 @@ function GetAllOrders(): void {
         response.data.forEach((Order: IOrders) => {
           if (Order == null) {
           } else {
+            console.log(Order);
             const node = document.createElement("li") as HTMLLIElement;
 
             node.appendChild(
@@ -122,7 +124,7 @@ function SearchFunction(): void {
               InputSearch.value
                 .toLowerCase()
                 .match(customer.lastName.toLowerCase()) ||
-              +InputSearch.value == customer.year
+              InputSearch.value == customer.year
             ) {
               const node = document.createElement("li") as HTMLLIElement;
               var dataSpan = document.createElement("span") as HTMLSpanElement;
@@ -161,6 +163,7 @@ function SearchFunction(): void {
 }
 
 function DisplayAllCustomers(): void {
+  List.innerHTML = "";
   axios
     .get<ICustomer[]>(uri)
     .then(
