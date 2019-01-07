@@ -2,12 +2,20 @@ import axios, {
   AxiosError,
   AxiosResponse
 } from "../../node_modules/axios/index";
-
-interface ICustomer {
+export class Customer {
   id: number;
   firstName: string;
   lastName: string;
   year: string;
+
+  constructor() {}
+}
+
+export interface ICustomer {
+  id: number;
+  firstName: string;
+  lastName: string;
+  year: number;
 }
 
 interface IOrders {
@@ -15,8 +23,8 @@ interface IOrders {
   orderDescription: string;
   KundeId: number;
 }
-let uri: string = "https://localhost:44350/api/customer";
-// let uri: string = "http://mscustomer.azurewebsites.net/api/customer";
+// let uri: string = "https://localhost:44350/api/customer";
+let uri: string = "http://mscustomer.azurewebsites.net/api/customer";
 // let uri: string = "http://localhost:63152/api/customer/";
 let uri2: string = "http://mscustomer.azurewebsites.net/api/orders";
 
@@ -67,7 +75,7 @@ let InputSearch: HTMLInputElement = document.getElementById(
 // var items = document.querySelectorAll("#list li span"), tab = [], LiIndex;
 
 Get.addEventListener("click", GetAllOrders);
-InputSearch.addEventListener("change", SearchFunction);
+InputSearch.addEventListener("keyup", SearchFunction);
 GetAButton.addEventListener("click", DisplayACustomer);
 GetButton.addEventListener("click", DisplayAllCustomers);
 AddButton.addEventListener("click", AddCustomers);
@@ -109,57 +117,43 @@ function GetAllOrders(): void {
 
 function SearchFunction(): void {
   List.innerHTML = "";
+  const CustArray: ICustomer[] = new Array();
+  axios.get<ICustomer[]>(uri).then(
+    (response: AxiosResponse<ICustomer[]>): void => {
+      const customerList: any = response.data;
+      const mapData: ICustomer[] = customerList as ICustomer[];
 
-  axios
-    .get<ICustomer[]>(uri)
-    .then(
-      (response: AxiosResponse<ICustomer[]>): void => {
-        response.data.forEach((customer: ICustomer) => {
-          if (customer == null) {
-          } else {
-            if (
-              InputSearch.value
-                .toLowerCase()
-                .match(customer.firstName.toLowerCase()) ||
-              InputSearch.value
-                .toLowerCase()
-                .match(customer.lastName.toLowerCase()) ||
-              InputSearch.value == customer.year
-            ) {
-              const node = document.createElement("li") as HTMLLIElement;
-              var dataSpan = document.createElement("span") as HTMLSpanElement;
-              var dataSpan2 = document.createElement("span") as HTMLSpanElement;
-              var dataSpan3 = document.createElement("span") as HTMLSpanElement;
-              var dataSpan4 = document.createElement("span") as HTMLSpanElement;
+      mapData.filter((customer: ICustomer) => {
+        if (
+          customer.firstName
+            .toLowerCase()
+            .match(InputSearch.value.toLowerCase())
+        ) {
+          CustArray.push(customer);
+        }
+      });
 
-              dataSpan.appendChild(document.createTextNode(`${customer.id}`));
-              dataSpan2.appendChild(
-                document.createTextNode(`${customer.firstName}`)
-              );
-              dataSpan3.appendChild(
-                document.createTextNode(`${customer.lastName}`)
-              );
-              dataSpan4.appendChild(
-                document.createTextNode(`${customer.year}`)
-              );
-              node.appendChild(dataSpan);
-              node.appendChild(dataSpan2);
-              node.appendChild(dataSpan3);
-              node.appendChild(dataSpan4);
+      CustArray.forEach((cust: ICustomer) => {
+        const node = document.createElement("li") as HTMLLIElement;
+        var dataSpan = document.createElement("span") as HTMLSpanElement;
+        var dataSpan2 = document.createElement("span") as HTMLSpanElement;
+        var dataSpan3 = document.createElement("span") as HTMLSpanElement;
+        var dataSpan4 = document.createElement("span") as HTMLSpanElement;
 
-              // node.appendChild(document.createTextNode(`${customer.id} ${customer.firstName} ${customer.lastName} ${customer.year}`));
-              List.appendChild(node);
-            }
-          }
-        });
-      }
-    )
-    .catch(
-      (error: AxiosError): void => {
-        List.innerHTML = error.message;
-        console.log(error.message);
-      }
-    );
+        dataSpan.appendChild(document.createTextNode(`${cust.id}`));
+        dataSpan2.appendChild(document.createTextNode(`${cust.firstName}`));
+        dataSpan3.appendChild(document.createTextNode(`${cust.lastName}`));
+        dataSpan4.appendChild(document.createTextNode(`${cust.year}`));
+        node.appendChild(dataSpan);
+        node.appendChild(dataSpan2);
+        node.appendChild(dataSpan3);
+        node.appendChild(dataSpan4);
+
+        // node.appendChild(document.createTextNode(`${customer.id} ${customer.firstName} ${customer.lastName} ${customer.year}`));
+        List.appendChild(node);
+      });
+    }
+  );
 }
 
 function DisplayAllCustomers(): void {
